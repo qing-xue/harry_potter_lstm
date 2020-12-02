@@ -77,6 +77,6 @@ if __name__ == '__main__':
     print(checkpoint)
 
     #生成文本
-    samp = sample(checkpoint, 150, lstm_num_units, len(vocab), prime="Hi, ")
+    samp = sample(checkpoint, 1000, lstm_num_units, len(vocab), prime="Hi, ")
     print('--------------------------------')
     print(samp)

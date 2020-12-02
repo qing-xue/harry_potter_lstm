@@ -235,11 +235,11 @@ class char_RNN:
         #梯度裁剪
         self.optimizer = model_optimizer(learning_rate=learning_rate, loss=self.loss, clip_val=clip_val)
 
-n_seqs=100
-n_sequencd_length=100
+n_seqs=200
+n_sequencd_length=200
 lstm_num_units=512
 num_layers=2
-learning_rate=0.01
+learning_rate=0.0001#0.01会过拟合
 keep_prob=0.5
 
 if __name__ == '__main__':
@@ -253,7 +253,7 @@ if __name__ == '__main__':
     4.生成文本
     '''
     #加载数据
-    vocab, vocab2Int, int2Vocab, encode = loadData('2.harry_potter_lstm/data/Harry_Potter1-7.txt')
+    vocab, vocab2Int, int2Vocab, encode = loadData('data/Harry_Potter1-7.txt')
     #初始化模型
     char_rnn = char_RNN(vocab=vocab, n_seqs = n_seqs, n_sequencd_length = n_sequencd_length,
                         lstm_num_units=lstm_num_units, keep_prob=keep_prob, num_layers=num_layers,
@@ -262,7 +262,7 @@ if __name__ == '__main__':
     saver = tf.train.Saver()
 
     #设置迭代轮数
-    epochs = 2
+    epochs = 150
     #全局计数
     count = 0
 
@@ -288,7 +288,7 @@ if __name__ == '__main__':
                 if count % 500 == 0:
                     print('-----------------------------')
                     print('轮数：%d:%d' % (epoch + 1, epochs))
-                    print('训练步数：%d' % (count))
+                    print('训练步数：%d' % (count))#steps等于batch_number
                     print('训练误差:%.4f' % (loss))
             #定期保存ckpt
             if epoch % 5 == 0:
