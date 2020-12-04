@@ -15,6 +15,7 @@ Hi, he was nearly off at Harry to say the time that and she had been back to his
 import tensorflow as tf
 import numpy as np
 
+
 def loadData(fileName):
     '''
     加载数据
@@ -26,6 +27,7 @@ def loadData(fileName):
         encode：编码后的文本（用索引表示整个文本）
     '''
     #读取文件
+
     test = open(fileName, encoding='utf-8').read()
 
     #将所有出现过的字符放入集合中，便于生成索引
@@ -253,7 +255,7 @@ if __name__ == '__main__':
     4.生成文本
     '''
     #加载数据
-    vocab, vocab2Int, int2Vocab, encode = loadData('data/Harry_Potter1-7.txt')
+    vocab, vocab2Int, int2Vocab, encode = loadData('data/171160.txt')
     #初始化模型
     char_rnn = char_RNN(vocab=vocab, n_seqs = n_seqs, n_sequencd_length = n_sequencd_length,
                         lstm_num_units=lstm_num_units, keep_prob=keep_prob, num_layers=num_layers,
@@ -262,7 +264,7 @@ if __name__ == '__main__':
     saver = tf.train.Saver()
 
     #设置迭代轮数
-    epochs = 150
+    epochs = 400
     #全局计数
     count = 0
 
@@ -288,7 +290,7 @@ if __name__ == '__main__':
                 if count % 500 == 0:
                     print('-----------------------------')
                     print('轮数：%d:%d' % (epoch + 1, epochs))
-                    print('训练步数：%d' % (count))#steps等于batch_number
+                    print('训练步数：%d' % (count))#count等于batch_number
                     print('训练误差:%.4f' % (loss))
             #定期保存ckpt
             if epoch % 5 == 0:

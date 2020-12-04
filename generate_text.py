@@ -71,12 +71,12 @@ def sample(checkpoint, n_samples, lstm_num_units, vocab_size, prime="The "):
 
 if __name__ == '__main__':
     #加载文件
-    vocab, vocab2Int, int2Vocab, encode = loadData('data/Harry_Potter1-7.txt')
+    vocab, vocab2Int, int2Vocab, encode = loadData('data/171160.txt')
     #读取checkpoint
     checkpoint = tf.train.latest_checkpoint('checkpoint/')
     print(checkpoint)
 
     #生成文本
-    samp = sample(checkpoint, 1000, lstm_num_units, len(vocab), prime="Hi, ")
+    samp = sample(checkpoint, 1000, lstm_num_units, len(vocab), prime="曾闻")
     print('--------------------------------')
     print(samp)
