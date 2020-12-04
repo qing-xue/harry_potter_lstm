@@ -27,11 +27,10 @@ def loadData(fileName):
         encode：编码后的文本（用索引表示整个文本）
     '''
     #读取文件
-
     test = open(fileName, encoding='utf-8').read()
 
     #将所有出现过的字符放入集合中，便于生成索引
-    vocab = set(test)
+    vocab = set(test)    # Ch len: 4227
     #通过排序保证每次运行后生成的索引一致
     vocabList = list(vocab)
     vocabList.sort()
@@ -40,7 +39,7 @@ def loadData(fileName):
     vocab2Int = {word:index for index, word in enumerate(vocabList)}
     #索引->词
     int2Vocab = {index:word for word, index in vocab2Int.items()}
-    #将文件编码
+    #将文件编码           # Ch len: 924402
     encode = np.array([vocab2Int[word] for word in test])
 
     return vocab, vocab2Int, int2Vocab, encode
@@ -75,11 +74,11 @@ def get_batch(input_data, n_seqs, n_sequencd_length):
         #lstm中前一个输出y是后一个输入x，所以x和y实际上是错开一位的
         #下面就是将x中的前移一位，转换成y
         y[:, : -1] = x[:, 1:]
-        y[:, -1] = x[:, 0]
+        y[:, -1] = x[:, 0]    # 最后一个字符回到初始？
 
         #yield是一个生成器，百度有详细说明
         yield x, y
-
+  
 def model_input(n_seqs, n_sequencd_length):
     '''
     模型输入部分
@@ -241,7 +240,7 @@ n_seqs=200
 n_sequencd_length=200
 lstm_num_units=512
 num_layers=2
-learning_rate=0.0001#0.01会过拟合
+learning_rate=0.0001    # 0.01会过拟合
 keep_prob=0.5
 
 if __name__ == '__main__':
