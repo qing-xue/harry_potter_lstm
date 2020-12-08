@@ -223,7 +223,7 @@ class char_RNN:
         cell, self.init_state = model_lstm(lstm_num_units=lstm_num_units, keep_prob=keep_prob, num_layers=num_layers,
                                       n_seqs=n_seqs)
         #目前输入的内容是编码后的文本，是一个个数字表示，这里把它转换成onehot向量形式
-        input_one_hot = tf.one_hot(self.input, len(vocab))
+        input_one_hot = tf.one_hot(self.input, len(vocab))   # Ch onthot: 4227
 
         #运次lstm
         outputs, self.state = tf.nn.dynamic_rnn(cell, input_one_hot, initial_state=self.init_state)

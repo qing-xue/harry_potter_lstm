@@ -73,7 +73,7 @@ if __name__ == '__main__':
     #加载文件
     vocab, vocab2Int, int2Vocab, encode = loadData('data/171160.txt')
     #读取checkpoint
-    checkpoint = tf.train.latest_checkpoint('checkpoint/')
+    checkpoint = tf.train.latest_checkpoint('checkpoint_ch/')
     print(checkpoint)
 
     #生成文本

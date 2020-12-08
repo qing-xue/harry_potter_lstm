@@ -296,6 +296,6 @@ if __name__ == '__main__':
                         print('训练误差:%.4f' % (loss))
                 #定期保存ckpt
                 if epoch % 5 == 0:
-                    saver.save(sess, 'checkpoint/model/lstm%d.ckpt' % (lstm_layer), global_step=count)
+                    saver.save(sess, 'checkpoint/lstm%d/model.ckpt' % (lstm_layer), global_step=count)
 
-            saver.save(sess, 'checkpoint/model/lsmt%d.ckpt' % (lstm_layer), global_step=count)
+            saver.save(sess, 'checkpoint/lstm%d/model.ckpt' % (lstm_layer), global_step=count)
