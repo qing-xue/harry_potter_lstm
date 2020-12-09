@@ -14,7 +14,7 @@ Hi, he was nearly off at Harry to say the time that and she had been back to his
 
 import tensorflow as tf
 import numpy as np
-
+from matplotlib  import pyplot as plt
 
 def loadData(fileName):
     '''
@@ -27,10 +27,11 @@ def loadData(fileName):
         encode：编码后的文本（用索引表示整个文本）
     '''
     #读取文件
+
     test = open(fileName, encoding='utf-8').read()
 
     #将所有出现过的字符放入集合中，便于生成索引
-    vocab = set(test)    # Ch len: 4227
+    vocab = set(test)
     #通过排序保证每次运行后生成的索引一致
     vocabList = list(vocab)
     vocabList.sort()
@@ -39,7 +40,7 @@ def loadData(fileName):
     vocab2Int = {word:index for index, word in enumerate(vocabList)}
     #索引->词
     int2Vocab = {index:word for word, index in vocab2Int.items()}
-    #将文件编码           # Ch len: 924402
+    #将文件编码
     encode = np.array([vocab2Int[word] for word in test])
 
     return vocab, vocab2Int, int2Vocab, encode
@@ -74,11 +75,11 @@ def get_batch(input_data, n_seqs, n_sequencd_length):
         #lstm中前一个输出y是后一个输入x，所以x和y实际上是错开一位的
         #下面就是将x中的前移一位，转换成y
         y[:, : -1] = x[:, 1:]
-        y[:, -1] = x[:, 0]    # 最后一个字符回到初始？
+        y[:, -1] = x[:, 0]
 
         #yield是一个生成器，百度有详细说明
         yield x, y
-  
+
 def model_input(n_seqs, n_sequencd_length):
     '''
     模型输入部分
@@ -223,7 +224,7 @@ class char_RNN:
         cell, self.init_state = model_lstm(lstm_num_units=lstm_num_units, keep_prob=keep_prob, num_layers=num_layers,
                                       n_seqs=n_seqs)
         #目前输入的内容是编码后的文本，是一个个数字表示，这里把它转换成onehot向量形式
-        input_one_hot = tf.one_hot(self.input, len(vocab))   # Ch onthot: 4227
+        input_one_hot = tf.one_hot(self.input, len(vocab))
 
         #运次lstm
         outputs, self.state = tf.nn.dynamic_rnn(cell, input_one_hot, initial_state=self.init_state)
@@ -240,7 +241,7 @@ n_seqs=200
 n_sequencd_length=200
 lstm_num_units=512
 num_layers=2
-learning_rate=0.0001    # 0.01会过拟合
+learning_rate=0.01#0.01会过拟合
 keep_prob=0.5
 
 if __name__ == '__main__':
@@ -266,7 +267,8 @@ if __name__ == '__main__':
     epochs = 400
     #全局计数
     count = 0
-
+    countepoch=0
+    losses=[]
     with tf.Session() as sess:
         #初始化所有变量
         sess.run(tf.global_variables_initializer())
@@ -284,7 +286,7 @@ if __name__ == '__main__':
 
                 #训练
                 _, loss, _ = sess.run([char_rnn.state, char_rnn.loss, char_rnn.optimizer], feed_dict=feed)
-
+                
                 #定期打印数据
                 if count % 500 == 0:
                     print('-----------------------------')
@@ -294,5 +296,13 @@ if __name__ == '__main__':
             #定期保存ckpt
             if epoch % 5 == 0:
                 saver.save(sess, 'checkpoint/model.ckpt',global_step=count)
+                countepoch += 1
+                losses.append(loss)
 
         saver.save(sess, 'checkpoint/model.ckpt', global_step=count)
+    plt.plot(range(countepoch),losses)
+    plt.title("Learning rate =" + str(learning_rate))
+    plt.ylabel('loss')
+    plt.xlabel('epochs (per five)')
+    plt.show()
+    plt.savefig('/data/code/gjz/2.harry_potter_lstm/classification_pr.png')
