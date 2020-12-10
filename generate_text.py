@@ -68,12 +68,11 @@ def sample(checkpoint, n_samples, lstm_num_units, vocab_size, prime="The "):
     return ''.join(samples)
 
 
-
 if __name__ == '__main__':
     #加载文件
     vocab, vocab2Int, int2Vocab, encode = loadData('data/171160.txt')
     #读取checkpoint
-    checkpoint = tf.train.latest_checkpoint('checkpoint_ch/')
+    checkpoint = tf.train.latest_checkpoint('checkpoint_ch/lstm3/')
     print(checkpoint)
 
     #生成文本

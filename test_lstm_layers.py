@@ -239,7 +239,7 @@ class char_RNN:
 n_seqs=200
 n_sequencd_length=200
 lstm_num_units=512
-num_layers=[1,2,3,4]
+num_layers=4
 learning_rate=0.01    # 英文0.01会过拟合
 keep_prob=0.5
 
@@ -256,46 +256,44 @@ if __name__ == '__main__':
     #加载数据
     vocab, vocab2Int, int2Vocab, encode = loadData('data/171160.txt')
 
-    ## 循环不同 lstm 层数
-    for lstm_layer in num_layers:
-        #初始化模型
-        char_rnn = char_RNN(vocab=vocab, n_seqs = n_seqs, n_sequencd_length = n_sequencd_length,
-                            lstm_num_units=lstm_num_units, keep_prob=keep_prob, num_layers=lstm_layer,
-                    learning_rate=learning_rate, clip_val=5)
+    #初始化模型
+    char_rnn = char_RNN(vocab=vocab, n_seqs = n_seqs, n_sequencd_length = n_sequencd_length,
+                        lstm_num_units=lstm_num_units, keep_prob=keep_prob, num_layers=num_layers,
+                learning_rate=learning_rate, clip_val=5)
 
-        saver = tf.train.Saver()
+    saver = tf.train.Saver()
 
-        #设置迭代轮数
-        epochs = 400
-        #全局计数
-        count = 0
+    #设置迭代轮数
+    epochs = 400
+    #全局计数
+    count = 0
 
-        with tf.Session() as sess:
-            #初始化所有变量
-            sess.run(tf.global_variables_initializer())
+    with tf.Session() as sess:
+        #初始化所有变量
+        sess.run(tf.global_variables_initializer())
 
-            #进行轮数迭代
-            for epoch in range(epochs):
-                #每次获取一个batch，进行训练
-                for x, y in get_batch(input_data=encode, n_seqs=n_seqs, n_sequencd_length=n_sequencd_length):
-                    count += 1
+        #进行轮数迭代
+        for epoch in range(epochs):
+            #每次获取一个batch，进行训练
+            for x, y in get_batch(input_data=encode, n_seqs=n_seqs, n_sequencd_length=n_sequencd_length):
+                count += 1
 
-                    feed = {
-                        char_rnn.input:x,
-                        char_rnn.target:y
-                    }
+                feed = {
+                    char_rnn.input:x,
+                    char_rnn.target:y
+                }
 
-                    #训练
-                    _, loss, _ = sess.run([char_rnn.state, char_rnn.loss, char_rnn.optimizer], feed_dict=feed)
+                #训练
+                _, loss, _ = sess.run([char_rnn.state, char_rnn.loss, char_rnn.optimizer], feed_dict=feed)
 
-                    #定期打印数据
-                    if count % 500 == 0:
-                        print('-----------------------------')
-                        print('轮数：%d:%d' % (epoch + 1, epochs))
-                        print('训练步数：%d' % (count))#count等于batch_number
-                        print('训练误差:%.4f' % (loss))
-                #定期保存ckpt
-                if epoch % 5 == 0:
-                    saver.save(sess, 'checkpoint/lstm%d/model.ckpt' % (lstm_layer), global_step=count)
+                #定期打印数据
+                if count % 500 == 0:
+                    print('-----------------------------')
+                    print('轮数：%d:%d' % (epoch + 1, epochs))
+                    print('训练步数：%d' % (count))#count等于batch_number
+                    print('训练误差:%.4f' % (loss))
+            #定期保存ckpt
+            # if epoch % 10 == 0:
+            #     saver.save(sess, 'checkpoint/lstm%d/model.ckpt' % (num_layers), global_step=count)
 
-            saver.save(sess, 'checkpoint/lstm%d/model.ckpt' % (lstm_layer), global_step=count)
+        saver.save(sess, 'checkpoint/lstm%d/model.ckpt' % (num_layers), global_step=count)
