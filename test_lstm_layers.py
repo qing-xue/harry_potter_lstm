@@ -14,6 +14,7 @@ Hi, he was nearly off at Harry to say the time that and she had been back to his
 
 import tensorflow as tf
 import numpy as np
+from matplotlib  import pyplot as plt
 
 
 def loadData(fileName):
@@ -239,9 +240,10 @@ class char_RNN:
 n_seqs=200
 n_sequencd_length=200
 lstm_num_units=512
-num_layers=4
-learning_rate=0.01    # 英文0.01会过拟合
+num_layers=3
+learning_rate=0.0001    # 英文0.01会过拟合
 keep_prob=0.5
+epochs = 800            # 设置迭代轮数
 
 if __name__ == '__main__':
     '''
@@ -267,6 +269,9 @@ if __name__ == '__main__':
     epochs = 400
     #全局计数
     count = 0
+    # plot
+    countepoch = 0
+    losses = []
 
     with tf.Session() as sess:
         #初始化所有变量
@@ -293,7 +298,16 @@ if __name__ == '__main__':
                     print('训练步数：%d' % (count))#count等于batch_number
                     print('训练误差:%.4f' % (loss))
             #定期保存ckpt
-            # if epoch % 10 == 0:
+            if epoch % 10 == 0:
+                countepoch += 1
+                losses.append(loss)
             #     saver.save(sess, 'checkpoint/lstm%d/model.ckpt' % (num_layers), global_step=count)
 
         saver.save(sess, 'checkpoint/lstm%d/model.ckpt' % (num_layers), global_step=count)
+    
+    plt.plot(range(countepoch), losses)
+    plt.title("Learning rate =" + str(learning_rate))
+    plt.ylabel('loss')
+    plt.xlabel('epochs (per five)')
+    plt.show()
+    plt.savefig('checkpoint/lstm%d/classification_pr.png' % (num_layers))
