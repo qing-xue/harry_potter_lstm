@@ -240,10 +240,10 @@ class char_RNN:
 n_seqs=200
 n_sequencd_length=200
 lstm_num_units=512
-num_layers=2          # 1,2,3,4
-learning_rate=0.01    # 英文0.01会过拟合
-keep_prob=1.0         # 0.5, 0.6, 0.7, 0.8, 0.9, 1.0
-epochs = 400          # 设置迭代轮数
+num_layers=3
+learning_rate=0.0001    # 英文0.01会过拟合
+keep_prob=0.5
+epochs = 800            # 设置迭代轮数
 
 if __name__ == '__main__':
     '''
@@ -265,6 +265,8 @@ if __name__ == '__main__':
 
     saver = tf.train.Saver()
 
+    #设置迭代轮数
+    epochs = 400
     #全局计数
     count = 0
     # plot
@@ -301,10 +303,11 @@ if __name__ == '__main__':
                 losses.append(loss)
             #     saver.save(sess, 'checkpoint/lstm%d/model.ckpt' % (num_layers), global_step=count)
 
-        saver.save(sess, 'checkpoint/dropout%f/model.ckpt' % (keep_prob), global_step=count)
+        saver.save(sess, 'checkpoint/lstm%d/model.ckpt' % (num_layers), global_step=count)
+    
     plt.plot(range(countepoch), losses)
     plt.title("Learning rate =" + str(learning_rate))
     plt.ylabel('loss')
     plt.xlabel('epochs (per five)')
     plt.show()
-    plt.savefig('checkpoint/dropout%f/classification_pr.png' % (keep_prob))
+    plt.savefig('checkpoint/lstm%d/classification_pr.png' % (num_layers))

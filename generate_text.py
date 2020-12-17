@@ -68,7 +68,6 @@ def sample(checkpoint, n_samples, lstm_num_units, vocab_size, prime="The "):
     return ''.join(samples)
 
 
-
 if __name__ == '__main__':
     #加载文件
     vocab, vocab2Int, int2Vocab, encode = loadData('data/171160.txt')
