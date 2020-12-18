@@ -240,10 +240,10 @@ class char_RNN:
 n_seqs=200
 n_sequencd_length=200
 lstm_num_units=512
-num_layers=3
-learning_rate=0.0001    # 英文0.01会过拟合
+num_layers=1
+learning_rate=0.01    # 英文0.01会过拟合
 keep_prob=0.5
-epochs = 800            # 设置迭代轮数
+epochs = 400          # 设置迭代轮数
 
 if __name__ == '__main__':
     '''

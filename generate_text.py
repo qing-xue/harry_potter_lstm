@@ -31,7 +31,7 @@ def sample(checkpoint, n_samples, lstm_num_units, vocab_size, prime="The "):
 
     # 将输入的单词转换为单个字符组成的list
     samples = [c for c in prime]
-    #创建模型
+    #创建模型！注意 num_layers 参数来自 harry_potter_lstm.py 文件
     model = char_RNN(vocab=vocab, n_seqs = 1, n_sequencd_length = 1,
                     lstm_num_units=lstm_num_units, keep_prob=1, num_layers=num_layers,
                  learning_rate=learning_rate, clip_val=5)
@@ -72,10 +72,10 @@ if __name__ == '__main__':
     #加载文件
     vocab, vocab2Int, int2Vocab, encode = loadData('data/171160.txt')
     #读取checkpoint
-    checkpoint = tf.train.latest_checkpoint('checkpoint/')
+    checkpoint = tf.train.latest_checkpoint('checkpoint_ch/lstm2/')
     print(checkpoint)
 
     #生成文本
-    samp = sample(checkpoint, 1000, lstm_num_units, len(vocab), prime="曾闻")
+    samp = sample(checkpoint, 200, lstm_num_units, len(vocab), prime="执火")
     print('--------------------------------')
     print(samp)
