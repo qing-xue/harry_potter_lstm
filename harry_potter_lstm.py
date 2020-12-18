@@ -27,7 +27,6 @@ def loadData(fileName):
         encode：编码后的文本（用索引表示整个文本）
     '''
     #读取文件
-
     test = open(fileName, encoding='utf-8').read()
 
     #将所有出现过的字符放入集合中，便于生成索引
@@ -241,7 +240,7 @@ n_seqs=200
 n_sequencd_length=200
 lstm_num_units=512
 num_layers=2
-learning_rate=0.01#0.01会过拟合
+learning_rate=0.01  # 0.01会过拟合
 keep_prob=0.5
 
 if __name__ == '__main__':
