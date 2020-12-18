@@ -118,7 +118,7 @@ def model_lstm(lstm_num_units, keep_prob, num_layers, n_seqs):
     #循环创建层
     for i in range(num_layers):
         #单独创建一层lstm节点
-        cell = tf.nn.rnn_cell.BasicLSTMCell(num_units=lstm_num_units)
+        cell = tf.nn.rnn_cell.LSTMCell(num_units=lstm_num_units)
         #添加drop
         drop = tf.nn.rnn_cell.DropoutWrapper(cell=cell, output_keep_prob=keep_prob)
         #将节点放入list中
@@ -240,7 +240,7 @@ n_seqs=200
 n_sequencd_length=200
 lstm_num_units=512
 num_layers=2
-learning_rate=0.01  # 0.01会过拟合
+learning_rate=0.01    # 0.01会过拟合
 keep_prob=0.5
 
 if __name__ == '__main__':
